@@ -34,7 +34,7 @@
                     </div>
                     <?php
                     // Include config file
-                    require_once "create.php";
+                    require_once "config.php";
                     
                     // Attempt select query execution
                     $sql = "SELECT * FROM employees";

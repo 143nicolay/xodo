@@ -3,8 +3,8 @@
 require_once "config.php";
  
 // Define variables and initialize with empty values
-$name = $address = $salary = "";
-$name_err = $address_err = $salary_err = "";
+$name = $age = $birthdate = $address = $studentid ="";
+$name_err = $age_err = $birthdate_err = $address_err = $studentid_err = "";
  
 // Processing form data when form is submitted
 if(isset($_POST["id"]) && !empty($_POST["id"])){
@@ -20,7 +20,21 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
     } else{
         $name = $input_name;
     }
-    
+
+    $input_age = trim($_POST["age"]);
+    if(empty($input_age)){
+        $age_err = "Please enter an age.";     
+    } else{
+        $age = $input_age;
+    }
+
+    $input_birthdate = trim($_POST["birthdate"]);
+    if(empty($input_birthdate)){
+        $birthdate_err = "Please enter an birth date.";     
+    } else{
+        $birthdate = $input_birthdate;
+    }
+ 
     // Validate address address
     $input_address = trim($_POST["address"]);
     if(empty($input_address)){
@@ -30,29 +44,28 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
     }
     
     // Validate salary
-    $input_salary = trim($_POST["salary"]);
-    if(empty($input_salary)){
-        $salary_err = "Please enter the salary amount.";     
-    } elseif(!ctype_digit($input_salary)){
-        $salary_err = "Please enter a positive integer value.";
+    $input_studentid = trim($_POST["studentid"]);
+    if(empty($input_studentid)){
+        $studentid_err = "Please enter a student ID.";     
     } else{
-        $salary = $input_salary;
+        $studentid = $input_studentid;
     }
     
     // Check input errors before inserting in database
-    if(empty($name_err) && empty($address_err) && empty($salary_err)){
+    if(empty($name_err) && empty($age_err)  && empty($birthdate_err) && empty($address_err) && empty($studentid_err)){
         // Prepare an update statement
         $sql = "UPDATE employees SET name=?, address=?, salary=? WHERE id=?";
          
         if($stmt = mysqli_prepare($link, $sql)){
             // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "sssi", $param_name, $param_address, $param_salary, $param_id);
+            mysqli_stmt_bind_param($stmt, "sssi", $param_name, $param_age, $param_birthdate, $param_address, $param_studentid);
             
             // Set parameters
             $param_name = $name;
+            $param_age = $age;
+            $param_birthdate = $birthdate;
             $param_address = $address;
-            $param_salary = $salary;
-            $param_id = $id;
+            $param_studentid = $studentid;
             
             // Attempt to execute the prepared statement
             if(mysqli_stmt_execute($stmt)){
@@ -141,7 +154,7 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
             <div class="row">
                 <div class="col-md-12">
                     <h2 class="mt-5">Update Record</h2>
-                    <p>Please edit the input values and submit to update the employee record.</p>
+                    <p>Please edit the input values and submit to update the student record.</p>
                     <form action="<?php echo htmlspecialchars(basename($_SERVER['REQUEST_URI'])); ?>" method="post">
                         <div class="form-group">
                             <label>Name</label>
@@ -149,14 +162,24 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
                             <span class="invalid-feedback"><?php echo $name_err;?></span>
                         </div>
                         <div class="form-group">
+                            <label>Age</label>
+                            <textarea name="age" class="form-control <?php echo (!empty($age_err)) ? 'is-invalid' : ''; ?>"><?php echo $age; ?></textarea>
+                            <span class="invalid-feedback"><?php echo $age_err;?></span>
+                        </div>
+                        <div class="form-group">
+                            <label>Birth Date</label>
+                            <textarea name="birthdate" class="form-control <?php echo (!empty($birthdate_err)) ? 'is-invalid' : ''; ?>"><?php echo $birthdate; ?></textarea>
+                            <span class="invalid-feedback"><?php echo $birthdate_err;?></span>
+                        </div>
+                        <div class="form-group">
                             <label>Address</label>
                             <textarea name="address" class="form-control <?php echo (!empty($address_err)) ? 'is-invalid' : ''; ?>"><?php echo $address; ?></textarea>
                             <span class="invalid-feedback"><?php echo $address_err;?></span>
                         </div>
                         <div class="form-group">
-                            <label>Salary</label>
-                            <input type="text" name="salary" class="form-control <?php echo (!empty($salary_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $salary; ?>">
-                            <span class="invalid-feedback"><?php echo $salary_err;?></span>
+                            <label>Student ID</label>
+                            <textarea name="studentid" class="form-control <?php echo (!empty($studentid_err)) ? 'is-invalid' : ''; ?>"><?php echo $studentid; ?></textarea>
+                            <span class="invalid-feedback"><?php echo $studentid_err;?></span>
                         </div>
                         <input type="hidden" name="id" value="<?php echo $id; ?>"/>
                         <input type="submit" class="btn btn-primary" value="Submit">

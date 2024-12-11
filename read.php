@@ -5,7 +5,7 @@ if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
     require_once "config.php";
     
     // Prepare a select statement
-    $sql = "SELECT * FROM employees WHERE id = ?";
+    $sql = "SELECT * FROM student WHERE id = ?";
     
     if($stmt = mysqli_prepare($link, $sql)){
         // Bind variables to the prepared statement as parameters
@@ -25,8 +25,10 @@ if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
                 
                 // Retrieve individual field value
                 $name = $row["name"];
+                $age = $row["age"];
+                $birthdate = $row["birthdate"];
                 $address = $row["address"];
-                $salary = $row["salary"];
+                $studentid = $row["studentid"];
             } else{
                 // URL doesn't contain valid id parameter. Redirect to error page
                 header("location: error.php");
@@ -73,13 +75,21 @@ if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
                         <label>Name</label>
                         <p><b><?php echo $row["name"]; ?></b></p>
                     </div>
+                     <div class="form-group">
+                        <label>Age</label>
+                        <p><b><?php echo $row["age"]; ?></b></p>
+                    </div>
+                      <div class="form-group">
+                        <label>Birth Date</label>
+                        <p><b><?php echo $row["birthdate"]; ?></b></p>
+                    </div>
                     <div class="form-group">
                         <label>Address</label>
                         <p><b><?php echo $row["address"]; ?></b></p>
                     </div>
                     <div class="form-group">
-                        <label>Salary</label>
-                        <p><b><?php echo $row["salary"]; ?></b></p>
+                        <label>Student ID</label>
+                        <p><b><?php echo $row["studentid"]; ?></b></p>
                     </div>
                     <p><a href="index.php" class="btn btn-primary">Back</a></p>
                 </div>
